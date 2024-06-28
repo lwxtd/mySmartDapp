@@ -14,6 +14,28 @@ router.post("/users", function (req, res, next) {
   res.send(req.query.firstName);
 });
 
+router.post("/getcontractdata", function (req, res, next) {
+  var obj = JSON.parse(
+    fsExtra.readJsonSync("./mycontracts/build/mySmart.json", "utf8")
+  );
+
+  let data = {
+    abi: obj.MySmart.abi,
+    bytecode: obj.MySmart.evm.bytecode.object,
+  };
+  res.json(data);
+});
+router.post("/getallcontractdata", function (req, res, next) {
+  var obj = JSON.parse(
+    fsExtra.readJsonSync("./mycontracts/build/mySmart.json", "utf8")
+  );
+
+  let data = {
+    abi: obj.MySmart,
+  };
+  res.json(data);
+});
+
 //============== creating a file
 router.get("/createsolfile", function (req, res, next) {
   fs.appendFile("./mycontracts/myproject.sol", "hello file", function (err) {

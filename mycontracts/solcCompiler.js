@@ -19,6 +19,7 @@ function solcCompiler() {
       },
     },
     settings: {
+      evmVersion: "petersburg",
       outputSelection: {
         "*": {
           "*": ["*"],
@@ -48,6 +49,7 @@ function solcCompiler() {
   }
 
   let compiledJson = JSON.parse(solc.compile(JSON.stringify(input)));
+  console.log("dddddd", compiledJson);
 
   const buildPath = path.resolve(__dirname, "build");
   writeOutput(compiledJson, buildPath);
