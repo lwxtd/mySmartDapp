@@ -1,0 +1,4 @@
+address  payable add1=payable(0xe9F484F0669C3D467b026Da1f5562B01EeD8dC53);
+
+
+  add1.transfer(msg.value*rat1/100);
