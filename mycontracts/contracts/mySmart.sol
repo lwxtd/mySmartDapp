@@ -3,13 +3,13 @@
   contract MySmart {
       uint256 number;
       address  payable owner;
-      address  payable add1=payable(0xe9f484f0669c3d467b026da1f5562b01eed8dc53);
-      address  payable add1=payable(0xe9f484f0669c3d467b026da1f5562b01eed8dc53);
+      address  payable add1=payable(0x8189C2f5F44E1863079fE22180a2917d1f5cE504);
+      address  payable add1=payable(0x6A5C7F4E7cAa494857cDdb65509613C29eA7982a);
       
       
       
-      uint immutable  rat1=45;
-      uint immutable  rat2=55;
+      uint immutable  rat1=20;
+      uint immutable  rat2=80;
       
       
       
@@ -19,8 +19,8 @@
       owner=payable (msg.sender);
   }
   receive() external payable {
-      add1.transfer(msg.value*45/100);
-      add2.transfer(msg.value*55/100);
+      add1.transfer(msg.value*20/100);
+      add2.transfer(msg.value*80/100);
       
       
       
