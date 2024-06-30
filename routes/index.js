@@ -3,7 +3,7 @@ var router = express.Router();
 const compile = require("./../mycontracts/solcCompiler.js");
 const fsExtra = require("fs-extra");
 var fs = require("fs");
-
+const path = require("path");
 // /* GET home page. */
 // router.get("/", function (req, res, next) {
 //   res.render("index", { title: "Express" });
@@ -25,10 +25,36 @@ router.post("/users", function (req, res, next) {
 router.get("/test", function (req, res, next) {
   res.send("body isss not");
 });
-
+router.get("/test2", function (req, res, next) {
+  let data = {
+    "process.cwd() is ===>": process.cwd(),
+    "path.join(process.cwd(), /tmp/mycontracts/contracts/mySmart.sol) is ===> ":
+      path.join(process.cwd(), "/tmp/mycontracts/contracts/mySmart.sol"),
+  };
+  res.send(data);
+});
+router.get("/test3", function (req, res, next) {
+  let data = {
+    "process.cwd() is ===>": process.cwd(),
+  };
+  res.send(data);
+});
+router.get("/test4", function (req, res, next) {
+  let data = {
+    "path.join(process.cwd(), /tmp/mycontracts/contracts/mySmart.sol) is ===>":
+      path.join(process.cwd(), "/tmp/mycontracts/contracts/mySmart.sol"),
+  };
+  res.send(data);
+});
+router.get("/test5", function (req, res, next) {
+  let data = {
+    __dir__: __dir__,
+  };
+  res.send(data);
+});
 router.post("/getcontractdata", function (req, res, next) {
   var obj = JSON.parse(
-    fsExtra.readJsonSync("./mycontracts/build/mySmart.json", "utf8")
+    fsExtra.readJsonSync("/tmp/mycontracts/build/mySmart.json", "utf8")
   );
 
   let data = {
@@ -43,10 +69,10 @@ router.post(
   function (req, res, next) {
     let att = req.body.cnt;
     let ad1def = "address  payable add1=payable(" + att[0] + ");";
-    let ad2def = "address  payable add1=payable(" + att[2] + ");";
-    let ad3def = att[4] ? "address  payable add1=payable(" + att[4] + ");" : "";
-    let ad4def = att[6] ? "address  payable add1=payable(" + att[6] + ");" : "";
-    let ad5def = att[8] ? "address  payable add1=payable(" + att[8] + ");" : "";
+    let ad2def = "address  payable add2=payable(" + att[2] + ");";
+    let ad3def = att[4] ? "address  payable add3=payable(" + att[4] + ");" : "";
+    let ad4def = att[6] ? "address  payable add4=payable(" + att[6] + ");" : "";
+    let ad5def = att[8] ? "address  payable add5=payable(" + att[8] + ");" : "";
 
     let un1def = "uint immutable  rat1=" + +att[1] + ";";
     let rat1def = "add1.transfer(msg.value*" + att[1] + "/100);";
@@ -60,53 +86,58 @@ router.post(
     let rat5def = att[9] ? "add5.transfer(msg.value*" + att[9] + "/100);" : "";
     console.log(ad5def);
     let contractText = `// SPDX-License-Identifier: GPL-3.0
-  pragma solidity = 0.8.26;
-  contract MySmart {
-      uint256 number;
-      address  payable owner;
-      ${ad1def}
-      ${ad2def}
-      ${ad3def}
-      ${ad4def}
-      ${ad5def}
-      ${un1def}
-      ${un2def}
-      ${un3def}
-      ${un4def}
-      ${un5def}
-   
-
-   constructor(){
-      owner=payable (msg.sender);
+pragma solidity = 0.8.26;
+contract MySmart {
+    uint256 number;
+    address  payable owner;
+    ${ad1def}
+    ${ad2def}
+    ${ad3def}
+    ${ad4def}
+    ${ad5def}
+    ${un1def}
+    ${un2def}
+    ${un3def}
+    ${un4def}
+    ${un5def}
+    constructor(){
+    owner=payable (msg.sender);
   }
-  receive() external payable {
-      ${rat1def}
-      ${rat2def}
-      ${rat3def}
-      ${rat4def}
-      ${rat5def}
+receive() external payable {
+    ${rat1def}
+    ${rat2def}
+    ${rat3def}
+    ${rat4def}
+    ${rat5def}
+}
+}`;
 
-  }
-  };`;
+    console.log("contractText issss", contractText);
+    fs.writeFile(
+      process.cwd() + "/mycontracts/contracts/mySmart.sol",
+      contractText,
+      (err) => {
+        if (err) {
+          console.error(err);
+        } else {
+          let ff = compile.solcCompiler();
 
-    fs.writeFile("./mycontracts/contracts/mySmart.sol", contractText, (err) => {
-      if (err) {
-        console.error(err);
-      } else {
-        let ff = compile.solcCompiler();
+          console.log("file saved");
 
-        console.log("file saved");
+          var obj = JSON.parse(
+            fsExtra.readJsonSync(
+              process.cwd() + "/mycontracts/build/mySmart.json",
+              "utf8"
+            )
+          );
 
-        var obj = JSON.parse(
-          fsExtra.readJsonSync("./mycontracts/build/mySmart.json", "utf8")
-        );
-
-        let data = {
-          abi: obj.MySmart,
-        };
-        res.json(data);
+          let data = {
+            abi: obj.MySmart,
+          };
+          res.json(data);
+        }
       }
-    });
+    );
   }
 
   // var obj = JSON.parse(
@@ -122,7 +153,7 @@ router.post(
 
 router.post("/api/v1/getcontractdata", function (req, res, next) {
   var obj = JSON.parse(
-    fsExtra.readJsonSync("./mycontracts/build/mySmart.json", "utf8")
+    fsExtra.readJsonSync("/mycontracts/build/mySmart.json", "utf8")
   );
 
   let data = {
