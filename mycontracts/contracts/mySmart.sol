@@ -3,13 +3,13 @@ pragma solidity = 0.8.26;
 contract MySmart {
     uint256 number;
     address  payable owner;
-    address  payable add1=payable(0xe9F484F0669C3D467b026Da1f5562B01EeD8dC53);
-    address  payable add2=payable(0x8189C2f5F44E1863079fE22180a2917d1f5cE504);
+    address  payable add1=payable(0xBC31505a1C9711e070Af7AdF9078908B77475112);
+    address  payable add2=payable(0xC5a9657326F0AF7d0e5a985344bf29d85f17CB8f);
     
     
     
-    uint immutable  rat1=20;
-    uint immutable  rat2=80;
+    uint immutable  rat1=40;
+    uint immutable  rat2=60;
     
     
     
@@ -17,8 +17,8 @@ contract MySmart {
     owner=payable (msg.sender);
   }
 receive() external payable {
-    add1.transfer(msg.value*20/100);
-    add2.transfer(msg.value*80/100);
+    add1.transfer(msg.value*40/100);
+    add2.transfer(msg.value*60/100);
     
     
     

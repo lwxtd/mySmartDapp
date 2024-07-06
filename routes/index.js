@@ -134,6 +134,20 @@ receive() external payable {
           let data = {
             abi: obj.MySmart,
           };
+          let dateAppend = new Date();
+          fs.appendFile(
+            "./mycontracts/myproject.sol",
+            "\n" +
+              "compiled " +
+              dateAppend.toISOString() +
+              "\n" +
+              req.get("user-agent"),
+            function (err) {
+              if (err) throw err;
+              console.log("file saved");
+              res.send("File have been saved");
+            }
+          );
           res.json(data);
         }
       }
